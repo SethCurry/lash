@@ -1,35 +1,17 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <stdexcept>
 #include "spdlog/spdlog.h"
+#include "lexer.hpp"
 
 using namespace std;
 
-enum token_t
-{
-    identifier = 1,
-    separator = 2,
-    literal = 3,
-    comment = 4,
-};
-
 vector<char> const separators = {'(', ')'};
-
-class Token
-{
-public:
-    token_t type;
-    string value;
-    Token(token_t tType, string tValue)
-    {
-        type = tType;
-        value = tValue;
-    }
-};
 
 bool is_separator(char c)
 {
-    for (int i = 0; i < separators.size(); i++)
+    for (std::size_t i = 0; i < separators.size(); i++)
     {
         if (c == separators.at(i))
         {
@@ -40,40 +22,50 @@ bool is_separator(char c)
     return false;
 };
 
-int read_until_chars(string const &toParse, int const N, int const start_at, vector<char> const break_list)
-{
-    spdlog::set_level(spdlog::level::debug);
-    spdlog::debug("this is a debug message");
-    for (int i = start_at; i < N; i++)
-    {
-        char l = toParse.at(i);
-        for (int j = 0; j < break_list.size(); j++)
-            if (l == break_list.at(j))
-            {
-                return i;
-            }
-    }
-
-    return -1;
-};
-
-vector<Token *>
-lex(string const &toParse, int N)
+std::vector<Token *>
+lex(std::string const &toParse, int N)
 {
     vector<Token *> ret;
-
-    bool in_literal = false;
-    bool in_identifier = false;
+    int lineNo = 0;
+    int charNo = 0;
 
     for (int i = 0; i < N; i++)
     {
         char l = toParse[i];
+        if (l == '\n')
+        {
+            lineNo += 1;
+            charNo = 1;
+            continue;
+        }
+        else
+        {
+            charNo += 1;
+        }
+        if (l == ' ')
+        {
+            continue;
+        }
+
         if (is_separator(l))
         {
-            Token *t = new Token(token_t::separator, string(&l));
+            Token *t = new Token(token_t::separator, string(1, l));
             ret.push_back(t);
-            in_literal = false;
-            in_identifier = false;
+            continue;
+        }
+
+        switch (l)
+        {
+        case '"':
+            int literal_len = read_string_literal_len(toParse, N, i);
+            if (literal_len == -1)
+            {
+                throw std::logic_error("string missing \" terminator");
+            }
+            string lit = toParse.substr(i, literal_len);
+            Token *t = new Token(token_t::literal, lit);
+            ret.push_back(t);
+            i = i + literal_len - 1;
             continue;
         }
     }
