@@ -14,19 +14,45 @@ enum token_t
 class Token
 {
 public:
-    string type;
+    token_t type;
     string value;
-    Token(string tType, string tValue)
+    Token(token_t tType, string tValue)
     {
         type = tType;
         value = tValue;
     }
 };
 
-vector<string>
-lex()
+bool is_separator(char c)
 {
-    vector<string> ret;
+    switch (c)
+    {
+    case '(':
+    case ')':
+        return true;
+    }
+
+    return false;
+}
+
+vector<Token *>
+lex(string &toParse, int N)
+{
+    vector<Token *> ret;
+
+    bool in_literal = false;
+    bool in_identifier = false;
+
+    for (int i = 0; i < N; i++)
+    {
+        char l = toParse[i];
+        if (is_separator(l))
+        {
+            Token *t = new Token(token_t::separator, string(&l));
+            ret.push_back(t);
+            continue;
+        }
+    }
 
     return ret;
 }

@@ -4,4 +4,5 @@ cc_library(
     name = "lexer",
     srcs = ["lexer.cpp"],
     hdrs = ["lexer.hpp"],
+    visibility = ["//visibility:public"],
 )
