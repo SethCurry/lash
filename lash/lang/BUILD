@@ -5,4 +5,5 @@ cc_library(
     srcs = ["lexer.cpp"],
     hdrs = ["lexer.hpp"],
     visibility = ["//visibility:public"],
+    deps = ["@spdlog//:spdlog.so"],
 )

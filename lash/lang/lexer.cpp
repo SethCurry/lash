@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "spdlog/spdlog.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ enum token_t
     literal = 3,
     comment = 4,
 };
+
+vector<char> const separators = {'(', ')'};
 
 class Token
 {
@@ -26,11 +29,12 @@ public:
 
 bool is_separator(char c)
 {
-    switch (c)
+    for (int i = 0; i < separators.size(); i++)
     {
-    case '(':
-    case ')':
-        return true;
+        if (c == separators.at(i))
+        {
+            return true;
+        }
     }
 
     return false;
@@ -38,6 +42,8 @@ bool is_separator(char c)
 
 int read_until_chars(string const &toParse, int const N, int const start_at, vector<char> const break_list)
 {
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::debug("this is a debug message");
     for (int i = start_at; i < N; i++)
     {
         char l = toParse.at(i);
