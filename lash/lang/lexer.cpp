@@ -54,6 +54,20 @@ lex(std::string const &toParse, int N)
             continue;
         }
 
+        if (is_numeric(l))
+        {
+            int num_len = read_num_literal_len(toParse, N, i);
+            if (num_len == -1)
+            {
+                num_len = N;
+            }
+            string lit = toParse.substr(i, num_len);
+            Token *t = new Token(token_t::literal, lit);
+            ret.push_back(t);
+            i = i + num_len - 1;
+            continue;
+        }
+
         switch (l)
         {
         case '"':
