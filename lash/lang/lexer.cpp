@@ -68,9 +68,8 @@ lex(std::string const &toParse, int N)
             continue;
         }
 
-        switch (l)
+        if (l == '"')
         {
-        case '"':
             int literal_len = read_string_literal_len(toParse, N, i);
             if (literal_len == -1)
             {
@@ -82,6 +81,23 @@ lex(std::string const &toParse, int N)
             i = i + literal_len - 1;
             continue;
         }
+
+        // TODO should be probably be an "is_valid_symbol_char" kind of call
+        // but this technically works. Until it doesn't, anyways.
+        if (i >= N - 1)
+        {
+            break;
+        }
+        int symbol_len = read_symbol(toParse, N, i);
+        if (symbol_len == -1)
+        {
+            symbol_len = N;
+        }
+        string sym = toParse.substr(i, symbol_len);
+        Token *t = new Token(token_t::symbol, sym);
+        ret.push_back(t);
+        i = i + symbol_len - 1;
+        continue;
     }
 
     return ret;

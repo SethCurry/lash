@@ -27,12 +27,49 @@ TEST(LexerTest, ReadStringLiteralTest)
     EXPECT_STREQ(as_string.substr(8, literal_len).c_str(), (char *)"\"a test\"");
 }
 
+TEST(LexerTest, FullTest)
+{
+    char *const test_string = (char *)"(do-fn \"first arg\" (a-child-arg))";
+    std::string as_string = std::string(test_string);
+    std::vector<Token *> lexed = lex(as_string, 34);
+
+    std::string all_tokens = "";
+    for (std::size_t i = 0; i < lexed.size(); i++)
+    {
+        Token e = *lexed.at(i);
+        all_tokens += e.stringify() + "\n";
+    }
+    EXPECT_EQ(7, lexed.size()) << all_tokens;
+
+    Token first_entry = *lexed.at(0);
+    char *open_paren = (char *)"(";
+    EXPECT_EQ(token_t::separator, first_entry.type);
+    EXPECT_STREQ(open_paren, first_entry.value.c_str());
+
+    Token second_entry = *lexed.at(1);
+    char *do_fn = (char *)"do-fn";
+    EXPECT_EQ(token_t::symbol, second_entry.type);
+    EXPECT_STREQ(do_fn, second_entry.value.c_str());
+
+    Token third_entry = *lexed.at(2);
+    char *first_arg = (char *)"\"first arg\"";
+    EXPECT_EQ(token_t::literal, third_entry.type);
+    EXPECT_STREQ(first_arg, third_entry.value.c_str());
+}
+
 TEST(LexerTest, LexTest)
 {
     char *const test_string = (char *)"(\"a literal\")";
     std::string as_string = std::string(test_string);
     std::vector<Token *> lexed = lex(as_string, 14);
-    EXPECT_EQ(3, lexed.size()) << "Incorrect number of tokens returned by lexer";
+
+    std::string all_tokens = "";
+    for (std::size_t i = 0; i < lexed.size(); i++)
+    {
+        Token e = *lexed.at(i);
+        all_tokens += e.stringify() + "\n";
+    }
+    EXPECT_EQ(3, lexed.size()) << all_tokens;
 
     Token first_entry = *lexed.at(0);
     char *open_paren = (char *)"(";

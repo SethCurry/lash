@@ -6,7 +6,7 @@
 
 enum token_t
 {
-    identifier = 1,
+    symbol = 1,
     separator = 2,
     literal = 3,
     comment = 4,
@@ -21,6 +21,13 @@ public:
     {
         type = tType;
         value = tValue;
+    }
+
+    std::string stringify()
+    {
+        int type_value = static_cast<int>(type);
+        std::string type_string = std::to_string(type_value);
+        return "<Token type=" + type_string + " value=\"" + value + "\">";
     }
 };
 
@@ -77,6 +84,16 @@ int read_string_literal_len(std::string const &toParse, int const N, int const s
 int read_num_literal_len(std::string const &toParse, int const N, int const start_at)
 {
     std::vector<char> break_chars = {'(', ')', ' ', '\n'};
+    int ret = read_len_until_chars(toParse, N, start_at, break_chars);
+    return ret;
+}
+
+int read_symbol(std::string const &toParse, int const N, int const start_at)
+{
+    std::vector<char> break_chars = {'(',
+                                     ')',
+                                     ' ',
+                                     '\n'};
     int ret = read_len_until_chars(toParse, N, start_at, break_chars);
     return ret;
 }
