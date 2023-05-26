@@ -7,3 +7,9 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = ["@spdlog//:spdlog.so"],
 )
+
+cc_library(
+    name = "parser",
+    hdrs = ["parser.hpp"],
+    visibility = ["//visibility:public"],
+)
