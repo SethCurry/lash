@@ -5,12 +5,15 @@
 #include <vector>
 #include "lash/lang/lexer.hpp"
 
+// enum of possible types for a Value
 enum type_t
 {
     string = 1,
     number = 2,
 };
 
+// stores a value to be used in execution later on.
+// Allows dynamic typing of variables.
 class Value
 {
 public:
@@ -26,6 +29,8 @@ public:
     }
 };
 
+// A full statement, i.e. "(def my-var 'a thing')"
+// Could also contain other Statements
 class Statement
 {
 public:
