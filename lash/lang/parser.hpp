@@ -3,6 +3,7 @@
 
 #include <variant>
 #include <vector>
+#include "lash/lang/lexer.hpp"
 
 enum type_t
 {
@@ -35,4 +36,7 @@ public:
         children = c;
     }
 };
+
+int find_statement_len(std::vector<Token *> tokens, int start);
+
 #endif

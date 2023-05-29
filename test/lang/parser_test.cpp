@@ -3,8 +3,19 @@
 #include <string>
 #include <vector>
 
-TEST(ParserTest, Instantiate)
+TEST(FindStatementLen, invalid_no_end_paren)
 {
-    char *s = (char *)"test string";
-    Statement st = Statement(std::vector<std::variant<Value, Statement>>({Value(type_t::number, s, 12)}));
+    std::vector<Token *> tokens = {new Token(token_t::separator, std::string({'('}))};
+    int s_len = find_statement_len(tokens, 0);
+    EXPECT_EQ(-1, s_len);
+}
+
+TEST(FindStatementLen, nested_statements)
+{
+    char *const test_string = (char *)"(do-fn \"first arg\" (a-child-arg))";
+    std::string as_string = std::string(test_string);
+    std::vector<Token *> lexed = lex(as_string, 34);
+
+    int s_len = find_statement_len(lexed, 0);
+    EXPECT_EQ(7, s_len);
 }
