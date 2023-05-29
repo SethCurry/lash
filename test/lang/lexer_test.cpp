@@ -87,12 +87,6 @@ TEST(LexerTest, LexTest)
     EXPECT_STREQ(close_paren, third_entry.value.c_str());
 }
 
-TEST(LexerTest, IsNumeric)
-{
-    EXPECT_TRUE(is_numeric('1'));
-    EXPECT_FALSE(is_numeric('a'));
-}
-
 TEST(LexerTest, ReadNumLiteralLen)
 {
     char *const test_string = (char *)"(12345)";

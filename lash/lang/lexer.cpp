@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
+#include "lash/util/chars.hpp"
 #include "lexer.hpp"
 
 using namespace std;
@@ -10,35 +11,7 @@ vector<char> const separators = {'(', ')'};
 
 bool is_separator(char c)
 {
-    for (std::size_t i = 0; i < separators.size(); i++)
-    {
-        if (c == separators.at(i))
-        {
-            return true;
-        }
-    }
-
-    return false;
-};
-
-
-bool is_numeric(char c)
-{
-    switch (c)
-    {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-        return true;
-    }
-    return false;
+    return char_in_set(c, separators);
 };
 
 

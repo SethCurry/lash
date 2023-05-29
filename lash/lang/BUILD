@@ -5,7 +5,7 @@ cc_library(
     srcs = ["lexer.cpp"],
     hdrs = ["lexer.hpp"],
     visibility = ["//visibility:public"],
-    deps = ["@spdlog//:spdlog.so"],
+    deps = ["@spdlog//:spdlog.so", "//lash/util:chars.so"],
 )
 
 cc_library(

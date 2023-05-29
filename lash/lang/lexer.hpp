@@ -31,11 +31,14 @@ public:
     }
 };
 
+// returns whether the given character separates literals, symbols, etc.
 bool is_separator(char c);
+
+// lexes a string and returns a list of tokens that can be used for parsing
 std::vector<Token *> lex(std::string const &toParse, int const N);
 
-bool is_numeric(char c);
-
+// returns the length from the start position to the next occurrence of a character in break_list.
+// N is the length of toParse
 int read_len_until_chars(std::string const &toParse, int const N, int const start_at, std::vector<char> const break_list);
 
 int read_string_literal_len(std::string const &toParse, int const N, int const start_at);
